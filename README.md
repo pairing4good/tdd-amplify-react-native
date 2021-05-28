@@ -21,3 +21,80 @@ This is the second part of a two part tutorial.  In the [first tutorial](https:/
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/e394249d96eba901075e26b1832ea54fec24ca41)
 
 </details>
+
+<details>
+  <summary>First Test</summary>
+
+## First Test
+- In a new terminal window run `npm install cypress --save-dev` to install Cypress via [npm](https://www.npmjs.com):
+- Run `npx cypress open`
+- Configure the base url in the `cypress.json` file
+
+```js
+{
+    "baseUrl": "http://localhost:19006"
+}
+```
+- One of the benefits of using Expo is that it provides multiple ways to access your application.  For this test we are using the web browser version to quickly verify the apps behavior.
+
+- Run one or two of the Cypress `examples` to make sure everything is set up correctly.
+- **Once you have verified that Cypress is running correctly, delete the `cypress/integration/examples/` directory so that your tests will run faster on your [Continuous Integration (CI) Server](https://en.wikipedia.org/wiki/Continuous_integration).**
+- Create a new test called `note.spec.js` under the `cypress\integration\` directory in your project
+- Add the following tests to drive the same UI that you created in the first tutorial.
+```js
+describe('Note Capture', () => {
+    before(() => {
+        cy.visit('/');
+    });
+
+    it('should have header', () => {
+        cy.get('h1').should('have.text', 'My Notes App')
+    })
+    it('should create a note when name and description provided', () => {
+        cy.get('[data-testid=test-name-0]').should('not.exist');
+        cy.get('[data-testid=test-description-0]').should('not.exist');
+        
+        cy.get('[data-testid=note-name-field]').type('test note');
+        cy.get('[data-testid=note-description-field]').type('test note description');
+        cy.get('[data-testid=note-form-submit]').click();
+
+        cy.get('[data-testid=note-name-field]').should('have.value', '');
+        cy.get('[data-testid=note-description-field]').should('have.value', '');
+
+        cy.get('[data-testid=test-name-0]').should('have.text', 'test note');
+        cy.get('[data-testid=test-description-0]').should('have.text', 'test note description');
+    });
+
+    it('should delete note', () => {
+        cy.get('[data-testid=test-button-0]').click();
+
+        cy.get('[data-testid=test-name-0]').should('not.exist')
+        cy.get('[data-testid=test-description-0]').should('not.exist')
+    })
+});
+```
+
+- Run `expo start --web`
+
+Before we proceed let's add a script to run cypress into the `package.json` file in the `scripts` section.
+
+```js
+"scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "cypress:open": "cypress open"
+  }
+```
+
+- Now you can run `npm run cypress:open` to open cypress
+- Select the `note.spec.js` test
+
+- The tests are Red
+
+Our objective will be to get to Green as quickly as we can in the simplest way possible.  Since the backend already exists we will use it as is and build out just enough UI to make it turn Green.  Once it is Green then we will Refactor.
+
+
+
+</details>

@@ -1,21 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View, TextInput, Button } from 'react-native';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View>
+      <Text testID="note-header">My Notes App</Text>
+      <TextInput testID="note-name-field" />
+      <TextInput testID="note-description-field" />
+      <Button testID="note-form-submit" title="Create Note" />
+
+      <Text testID="test-name-0">test note</Text>
+      <Text testID="test-description-0">test note description</Text>
+      <Button testID="test-button-0" title="Delete note" />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

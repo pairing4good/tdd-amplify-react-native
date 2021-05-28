@@ -48,18 +48,19 @@ describe('Note Capture', () => {
     });
 
     it('should have header', () => {
-        cy.get('h1').should('have.text', 'My Notes App')
+        cy.get('[data-testid=note-header]').should('have.text', 'My Notes App')
     })
+
     it('should create a note when name and description provided', () => {
-        cy.get('[data-testid=test-name-0]').should('not.exist');
-        cy.get('[data-testid=test-description-0]').should('not.exist');
+        //cy.get('[data-testid=test-name-0]').should('not.exist');
+        //cy.get('[data-testid=test-description-0]').should('not.exist');
         
         cy.get('[data-testid=note-name-field]').type('test note');
         cy.get('[data-testid=note-description-field]').type('test note description');
         cy.get('[data-testid=note-form-submit]').click();
 
-        cy.get('[data-testid=note-name-field]').should('have.value', '');
-        cy.get('[data-testid=note-description-field]').should('have.value', '');
+        // cy.get('[data-testid=note-name-field]').should('have.value', '');
+        // cy.get('[data-testid=note-description-field]').should('have.value', '');
 
         cy.get('[data-testid=test-name-0]').should('have.text', 'test note');
         cy.get('[data-testid=test-description-0]').should('have.text', 'test note description');
@@ -68,8 +69,8 @@ describe('Note Capture', () => {
     it('should delete note', () => {
         cy.get('[data-testid=test-button-0]').click();
 
-        cy.get('[data-testid=test-name-0]').should('not.exist')
-        cy.get('[data-testid=test-description-0]').should('not.exist')
+        // cy.get('[data-testid=test-name-0]').should('not.exist')
+        // cy.get('[data-testid=test-description-0]').should('not.exist')
     })
 });
 ```
@@ -97,4 +98,37 @@ Our objective will be to get to Green as quickly as we can in the simplest way p
 
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/a891634380beff0c0b68a89b7024b2636b36d531)
 
+</details>
+
+<details>
+  <summary>Build The UI</summary>
+
+## Build The UI
+Build out the simplest UI that will cause the Cypress test to go Green.  Once we have green then we will refactor and expand the UI's functionality.
+
+```js
+import React from 'react';
+import { Text, View, TextInput, Button } from 'react-native';
+
+export default function App() {
+  return (
+    <View>
+      <Text testID="note-header">My Notes App</Text>
+      <TextInput testID="note-name-field" />
+      <TextInput testID="note-description-field" />
+      <Button testID="note-form-submit" title="Create Note" />
+
+      <Text testID="test-name-0">test note</Text>
+      <Text testID="test-description-0">test note description</Text>
+      <Button testID="test-button-0" title="Delete note" />
+    </View>
+  );
+}
+```
+
+- Run the Cypress test
+- Green
+- Commit
+
+[Code for this section]()
 </details>

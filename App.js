@@ -1,7 +1,17 @@
 import React from 'react';
 import { Text, View, TextInput, Button } from 'react-native';
+import { withAuthenticator } from "aws-amplify-react-native"
+import Amplify from "aws-amplify"
+import awsconfig from './aws-exports';
 
-export default function App() {
+Amplify.configure({
+  ...awsconfig,
+  Analytics: {
+    disabled: true,
+  },
+});
+
+function App() {
   return (
     <View>
       <Text testID="note-header">My Notes App</Text>
@@ -15,3 +25,5 @@ export default function App() {
     </View>
   );
 }
+
+export default withAuthenticator(App, true)

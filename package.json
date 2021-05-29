@@ -9,6 +9,8 @@
     "cypress:open": "cypress open"
   },
   "dependencies": {
+    "aws-amplify-react-native": "^5.0.1",
+    "cypress-localstorage-commands": "^1.4.4",
     "expo": "~41.0.1",
     "expo-status-bar": "~1.0.4",
     "react": "16.13.1",

@@ -432,6 +432,6 @@ export async function deleteById( id ) {
 - Green!
 - Commit
 
-[Code for this section]()
+[Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/647dff44562ffa491d5fc1150986dfb3609fb0e2)
 
 </details>

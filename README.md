@@ -1,13 +1,16 @@
 # TDD React Native App
-This is the second part of a two part tutorial.  In the [first tutorial](https://github.com/pairing4good/tdd-amplify-react) we created a React Notes App that uses an AWS Amplify backend to secure and store notes.  In this tutorial we will hook up a [native](https://en.wikipedia.org/wiki/Mobile_app#Native_app) mobile app that will use the same backend service that we built in the first tutorial.
+
+This is the second part of a two part tutorial. In the [first tutorial](https://github.com/pairing4good/tdd-amplify-react) we created a React Notes App that uses an AWS Amplify backend to secure and store notes. In this tutorial we will hook up a [native](https://en.wikipedia.org/wiki/Mobile_app#Native_app) mobile app that will use the same backend service that we built in the first tutorial.
 
 ## Prerequisites
+
 - Complete the [first tutorial](https://github.com/pairing4good/tdd-amplify-react) before you start this tutorial.
 
 <details>
   <summary>Set Up</summary>
 
 ## Set Up
+
 - Run `npm install --global expo-cli`
 - `cd` to the directory where you store your git repositories
 - Run `expo init tdd-amplify-react-native` and select the `blank` template when prompted.
@@ -26,6 +29,7 @@ This is the second part of a two part tutorial.  In the [first tutorial](https:/
   <summary>First Test</summary>
 
 ## First Test
+
 - In a new terminal window run `npm install cypress --save-dev` to install Cypress via [npm](https://www.npmjs.com):
 - Run `npx cypress open`
 - Configure the base url in the `cypress.json` file
@@ -35,50 +39,60 @@ This is the second part of a two part tutorial.  In the [first tutorial](https:/
     "baseUrl": "http://localhost:19006"
 }
 ```
-- One of the benefits of using Expo is that it provides multiple ways to access your application.  For this test we are using the web browser version to quickly verify the apps behavior.
+
+- One of the benefits of using Expo is that it provides multiple ways to access your application. For this test we are using the web browser version to quickly verify the apps behavior.
 
 - Run one or two of the Cypress `examples` to make sure everything is set up correctly.
 - **Once you have verified that Cypress is running correctly, delete the `cypress/integration/examples/` directory so that your tests will run faster on your [Continuous Integration (CI) Server](https://en.wikipedia.org/wiki/Continuous_integration).**
 - Create a new test called `note.spec.js` under the `cypress\integration\` directory in your project
 - Add the following tests to drive the same UI that you created in the first tutorial.
+
 ```js
-describe('Note Capture', () => {
-    before(() => {
-        cy.visit('/');
-    });
+describe("Note Capture", () => {
+  before(() => {
+    cy.visit("/");
+  });
 
-    it('should have header', () => {
-        cy.get('[data-testid=note-header]').should('have.text', 'My Notes App')
-    })
+  it("should have header", () => {
+    cy.get("[data-testid=note-header]").should("have.text", "My Notes App");
+  });
 
-    it('should create a note when name and description provided', () => {
-        //cy.get('[data-testid=test-name-0]').should('not.exist');
-        //cy.get('[data-testid=test-description-0]').should('not.exist');
-        
-        cy.get('[data-testid=note-name-field]').type('test note');
-        cy.get('[data-testid=note-description-field]').type('test note description');
-        cy.get('[data-testid=note-form-submit]').click();
+  it("should create a note when name and description provided", () => {
+    //cy.get('[data-testid=test-name-0]').should('not.exist');
+    //cy.get('[data-testid=test-description-0]').should('not.exist');
 
-        // cy.get('[data-testid=note-name-field]').should('have.value', '');
-        // cy.get('[data-testid=note-description-field]').should('have.value', '');
+    cy.get("[data-testid=note-name-field]").type("test note");
+    cy.get("[data-testid=note-description-field]").type(
+      "test note description"
+    );
+    cy.get("[data-testid=note-form-submit]").click();
 
-        cy.get('[data-testid=test-name-0]').should('have.text', 'test note');
-        cy.get('[data-testid=test-description-0]').should('have.text', 'test note description');
-    });
+    // cy.get('[data-testid=note-name-field]').should('have.value', '');
+    // cy.get('[data-testid=note-description-field]').should('have.value', '');
 
-    it('should delete note', () => {
-        cy.get('[data-testid=test-button-0]').click();
+    cy.get("[data-testid=test-name-0]").should("have.text", "test note");
+    cy.get("[data-testid=test-description-0]").should(
+      "have.text",
+      "test note description"
+    );
+  });
 
-        // cy.get('[data-testid=test-name-0]').should('not.exist')
-        // cy.get('[data-testid=test-description-0]').should('not.exist')
-    })
+  it("should delete note", () => {
+    cy.get("[data-testid=test-button-0]").click();
 
-    it('should have an option to sign out', () => {
-        cy.get('[data-testid=aws-amplify__auth--sign-out-button]').click()
-        cy.get('[data-testid=aws-amplify__auth--sign-in-to-your-account-text]').should('exist')
-    })
+    // cy.get('[data-testid=test-name-0]').should('not.exist')
+    // cy.get('[data-testid=test-description-0]').should('not.exist')
+  });
+
+  it("should have an option to sign out", () => {
+    cy.get("[data-testid=aws-amplify__auth--sign-out-button]").click();
+    cy.get(
+      "[data-testid=aws-amplify__auth--sign-in-to-your-account-text]"
+    ).should("exist");
+  });
 });
 ```
+
 - The commented out lines (`//`) will not work until we hook up the backend API
 
 - Run `expo start --web`
@@ -100,7 +114,7 @@ Before we proceed let's add a script to run cypress into the `package.json` file
 
 - The tests are Red
 
-Our objective will be to get to Green as quickly as we can in the simplest way possible.  Since the backend already exists we will use it as is and build out just enough UI to make it turn Green.  Once it is Green then we will Refactor.
+Our objective will be to get to Green as quickly as we can in the simplest way possible. Since the backend already exists we will use it as is and build out just enough UI to make it turn Green. Once it is Green then we will Refactor.
 
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/a891634380beff0c0b68a89b7024b2636b36d531)
 
@@ -110,11 +124,12 @@ Our objective will be to get to Green as quickly as we can in the simplest way p
   <summary>Build The UI</summary>
 
 ## Build The UI
-Build out the simplest UI that will cause the Cypress test to go Green.  Once we have green then we will refactor and expand the UI's functionality.
+
+Build out the simplest UI that will cause the Cypress test to go Green. Once we have green then we will refactor and expand the UI's functionality.
 
 ```js
-import React from 'react';
-import { Text, View, TextInput, Button } from 'react-native';
+import React from "react";
+import { Text, View, TextInput, Button } from "react-native";
 
 export default function App() {
   return (
@@ -137,13 +152,15 @@ export default function App() {
 - Commit
 
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/8841993a22da1eb4fdb146870df0c049aa1cdcfe)
+
 </details>
 
 <details>
   <summary>Connect Backend Auth</summary>
 
 ## Connect Backend Auth
-We want to reuse the same Amplify backend that we created in the first tutorial.
+
+We want to reuse the same Amplify backend authentication that we created in the first tutorial.
 
 - Go to http://console.aws.amazon.com/
 - Select `AWS Amplify`
@@ -152,6 +169,7 @@ We want to reuse the same Amplify backend that we created in the first tutorial.
 - Select the `Local setup instructions` section
 - Copy the provided command (ie: `amplify pull --appId xxxxxxxxxxx --envName xxx`)
 - Run the command you copied at the root of your project
+
 ```
 ? Choose your default editor: Visual Studio Code
 ? Choose the type of app that you're building: javascript
@@ -163,10 +181,12 @@ Please tell us about your project
 ? Start Command: npm run-script start
 ? Do you plan on modifying this backend?: No
 ```
+
 - This created the `aws-export.js` and added it to `.gitignore` so that your user credentials are not committed
 - Run `npm install aws-amplify-react-native`
 
 - Add authentication to `App.js`
+
 ```js
 ...
 import { withAuthenticator } from "aws-amplify-react-native"
@@ -188,6 +208,7 @@ function App() {
 
 export default withAuthenticator(App, true)
 ```
+
 - The `aws-amplify-react-native` library has an [issue](https://github.com/aws-amplify/amplify-js/issues/5918) that requires adding the `Analytics: {disabled: true}` option to the `Amplify.configure` function.
 
 - Add the following to the bottom of the `cypress/support/commands.js` file
@@ -272,9 +293,145 @@ afterEach(() => {
   cy.saveLocalStorage();
 });
 ```
+
 - Run the Cypress tests
 - Green!
 - Commit
 
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/1fb5a25acc72e15c053ea1ad5df988a704540d80)
+
+</details>
+
+<details>
+  <summary>Connect Backend API</summary>
+
+## Connect Backend API
+
+We want to reuse the same Amplify backend API that we created in the first tutorial.
+
+- Go to http://console.aws.amazon.com/
+- Select `AWS AppSync`
+- Select the application you created in the first tutorial
+- In the `Integrate with your app` section select the `JavaScript` tab
+- Copy the `amplify add codegen --apiId xxxxxxxxxxxxxxxxxxxx` command
+- Select `Schema` on the left navigation bar
+- Click the `Export schema` dropdown
+- Select `schema.json`
+- Once it has downloaded move the file to the root of your project
+- Run the command you copied (`amplify add codegen --apiId xxxxxxxxxxxxxxxxxxxx`)
+
+```
+? Choose the type of app that you're building: javascript
+? What javascript framework are you using: react-native
+? Choose the code generation language target: javascript
+? Enter the file name pattern of graphql queries, mutations and subscriptions: src/graphql/**/*.js
+? Do you want to generate/update all possible GraphQL operations - queries, mutations and subscriptions: Yes
+? Enter maximum statement depth [increase from default if your schema is deeply nested]: 2
+```
+
+- Create a new folder in the `src` directory called `test`
+- Create a new file named `NoteRepository.test.js`
+```js
+import { save, findAll, deleteById} from '../common/NoteRepository';
+import { API } from 'aws-amplify';
+import { createNote as createNoteMutation, deleteNote as deleteNoteMutation} from '../graphql/mutations';
+import { listNotes } from '../graphql/queries';
+
+
+const mockGraphql = jest.fn();
+const id = 'test-id'
+
+beforeEach(() => {
+    API.graphql = mockGraphql
+});
+
+afterEach(() => {
+    jest.clearAllMocks()
+});
+
+it('should create a new note', () => {
+    const note = {name: 'test name', description: 'test description'}
+
+    save(note)
+
+    expect(mockGraphql.mock.calls.length).toBe(1);
+    expect(mockGraphql.mock.calls[0][0]).toStrictEqual(
+        { query: createNoteMutation, variables: { input: note } }
+    );
+})
+
+it('should findAll notes', () => {
+    const note = {name: 'test name', description: 'test description'}
+
+    findAll(note)
+
+    expect(mockGraphql.mock.calls.length).toBe(1);
+    expect(mockGraphql.mock.calls[0][0]).toStrictEqual({ query: listNotes });
+})
+
+it('should delete note by id', () => {
+    deleteById(id)
+
+    expect(mockGraphql.mock.calls.length).toBe(1);
+    expect(mockGraphql.mock.calls[0][0]).toStrictEqual({ query: deleteNoteMutation, variables: { input: { id } }});
+})
+```
+
+- Run `npm install jest-expo --save-dev`
+- Add the following to your `package.json` file
+```json
+"scripts": {
+  ...
+  "test": "jest --watch --testPathPattern=src/test"
+},
+"jest": {
+  "preset": "jest-expo"
+}
+```
+
+- Run `npm install react-test-renderer --save-dev`
+- Run `npm install @react-native-community/netinfo`
+- Run `npm run test`
+
+- The tests go Red
+
+- Create a new folder in the `src` directory called `common`
+- Create a new file named `NoteRepository.js`
+```js
+import { API } from 'aws-amplify';
+import { listNotes } from '../graphql/queries';
+
+export async function findAll(){
+    const apiData = await API.graphql({ query: listNotes });
+    return apiData.data.listNotes.items;
+};
+
+```
+- One test goes Green
+
+```js
+...
+import { createNote as createNoteMutation, deleteNote as deleteNoteMutation} from '../graphql/mutations';
+
+...
+
+export async function save(note){
+    const apiData = await API.graphql({ query: createNoteMutation, variables: { input: note } });
+    return apiData.data.createNote;
+}
+```
+- One more test goes Green
+
+```js
+export async function deleteById( id ) {
+    return await API.graphql({ query: deleteNoteMutation, variables: { input: { id } }});
+}
+```
+- The final test goes Green
+- Run the Cypress tests.
+- Green!
+- Commit
+
+[Code for this section]()
+
 </details>

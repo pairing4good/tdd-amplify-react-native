@@ -23,6 +23,11 @@ function App() {
     fetchNotesCallback();
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => { fetchNotesCallback() }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   async function fetchNotesCallback() {
     const notes = await findAll()
     if(notes)

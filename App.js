@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TextInput, Button } from 'react-native';
+import { View} from 'react-native';
 import { withAuthenticator } from "aws-amplify-react-native";
 import { findAll, save, deleteById } from './src/common/NoteRepository';
 import Amplify from "aws-amplify"
 import awsconfig from './aws-exports';
+import NoteForm from './src/note/NoteForm';
+import Header from './src/note/Header';
+import NoteList from './src/note/NoteList';
 
 Amplify.configure({
   ...awsconfig,
@@ -43,35 +46,12 @@ function App() {
 
   return (
     <View>
-      <Text testID="note-header">My Notes App</Text>
-
-      <TextInput testID="note-name-field" 
-        onChangeText={text => setFormData({ 
-          ...formData, 'name': text}
-        )}
-        value={formData.name}/>
-
-      <TextInput testID="note-description-field"  
-        onChangeText={text => setFormData({ 
-          ...formData, 'description': text}
-        )}
-        value={formData.description}/>
-
-      <Button testID="note-form-submit" 
-        title="Create Note" 
-        onPress={createNote}/>
-
-      {
-        notes.map((note, index) => (
-          <div>
-            <Text testID={"test-name-" + index}>{note.name}</Text>
-            <Text testID={"test-description-" + index}>{note.description}</Text>
-            <Button testID={"test-button-" + index} 
-              onPress={() => deleteNoteCallback(note.id)}
-              title="Delete note" />
-          </div>
-        ))
-      }
+      <Header/>
+      <NoteForm setFormData={setFormData} 
+        formData={formData} 
+        createNote={createNote}/>
+      <NoteList notes={notes} 
+        deleteNoteCallback={deleteNoteCallback}/>
     </View>
   );
 }

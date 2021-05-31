@@ -146,7 +146,9 @@ export default function App() {
   );
 }
 ```
+
 - React Native uses different components than React
+
   - [View](https://reactnative.dev/docs/view)
   - [Text](https://reactnative.dev/docs/text)
   - [TextInput](https://reactnative.dev/docs/textinput)
@@ -535,7 +537,9 @@ function App() {
 }
 ...
 ```
+
 Here are syntax differences between React and React Native
+
 - React's `onChange` is replaced with `onChangeText` in React Native
 - React passes an event `e` to the `onChange` function where React Native just passes the actual text to the `onChangeText` function
 - React's `onClick` is replaced with `onPress` in React Native
@@ -558,8 +562,8 @@ Now we will test drive clearing the form values on save
 - Uncomment the assertions that will drive us to clear the note form in `cypress/integration/note.spec.js`
 
 ```js
-cy.get('[data-testid=note-name-field]').should('have.value', '');
-cy.get('[data-testid=note-description-field]').should('have.value', '');
+cy.get("[data-testid=note-name-field]").should("have.value", "");
+cy.get("[data-testid=note-description-field]").should("have.value", "");
 ```
 
 - We have a failing test that will drive our production code changes.
@@ -569,7 +573,7 @@ cy.get('[data-testid=note-description-field]').should('have.value', '');
 function App() {
 ...
   async function createNote() {
-    ... 
+    ...
     setFormData({name: '', description: ''});
   }
 ...
@@ -593,8 +597,8 @@ Now we will test drive the deletion of a note
 - Uncomment the assertions that will drive us to delete a note in `cypress/integration/note.spec.js`
 
 ```js
-cy.get('[data-testid=test-name-0]').should('not.exist')
-cy.get('[data-testid=test-description-0]').should('not.exist')
+cy.get("[data-testid=test-name-0]").should("not.exist");
+cy.get("[data-testid=test-description-0]").should("not.exist");
 ```
 
 - We have a failing test that will drive our production code changes.
@@ -617,15 +621,15 @@ function App() {
     <View>
       ...
 
-      <Button testID="note-form-submit" 
-        title="Create Note" 
+      <Button testID="note-form-submit"
+        title="Create Note"
         onPress={createNote}/>
 
       {
         notes.map((note, index) => (
           <div>
             ...
-            <Button testID={"test-button-" + index} 
+            <Button testID={"test-button-" + index}
               onPress={() => deleteNoteCallback(note.id)}
               title="Delete note" />
           </div>
@@ -642,5 +646,171 @@ function App() {
 - Commit
 
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/2062f451c66e3032c540c06c62d5bb8d71f23ded)
+
+</details>
+
+<details>
+  <summary>Single Responsibility</summary>
+
+## Single Responsibility
+
+The `App` component is doing way too much. Let's pull the form and the list out into separate components.
+
+- Create a new `note` folder in the `src` directory
+- Create a new component named `NoteForm.js` in the `note` directory
+- Copy the form to this new component
+
+```js
+import React from "react";
+import { TextInput, Button } from "react-native";
+
+function NoteForm(props) {
+  return (
+    <div>
+      <TextInput
+        testID="note-name-field"
+        onChangeText={(text) =>
+          props.setFormData({
+            ...props.formData,
+            name: text,
+          })
+        }
+        value={props.formData.name}
+      />
+
+      <TextInput
+        testID="note-description-field"
+        onChangeText={(text) =>
+          props.setFormData({
+            ...props.formData,
+            description: text,
+          })
+        }
+        value={props.formData.description}
+      />
+
+      <Button
+        testID="note-form-submit"
+        title="Create Note"
+        onPress={props.createNote}
+      />
+    </div>
+  );
+}
+
+export default NoteForm;
+```
+
+- Add the `NoteForm` component to `App.js`
+
+```js
+...
+import { Text, View, Button } from 'react-native';
+...
+import NoteForm from './src/note/NoteForm';
+
+...
+
+  return (
+    <View>
+      ...
+
+      <NoteForm setFormData={setFormData}
+        formData={formData}
+        createNote={createNote}/>
+
+      ...
+    </View>
+  );
+}
+...
+```
+
+- Rerun all of your tests
+- Green
+
+- Pull out a `Header` component
+
+```js
+import React from "react";
+import { Text } from "react-native";
+
+function Header() {
+  return <Text testID="note-header">My Notes App</Text>;
+}
+
+export default Header;
+```
+
+```js
+...
+import Header from './src/note/Header';
+...
+  return (
+    <View>
+      <Header/>
+      ...
+    </View>
+  );
+}
+...
+```
+
+- Rerun all of your tests
+- Green
+
+- Pull out a `NoteList` component
+
+```js
+import React from "react";
+import { Text, Button } from "react-native";
+
+function NoteList(props) {
+  return (
+    <div>
+      {props.notes.map((note, index) => (
+        <div>
+          <Text testID={"test-name-" + index}>{note.name}</Text>
+          <Text testID={"test-description-" + index}>{note.description}</Text>
+          <Button
+            testID={"test-button-" + index}
+            onPress={() => props.deleteNoteCallback(note.id)}
+            title="Delete note"
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default NoteList;
+```
+
+```js
+...
+import { View} from 'react-native';
+...
+import NoteList from './src/note/NoteList';
+
+...
+
+function App() {
+  ...
+  return (
+    <View>
+      ...
+      <NoteList notes={notes}
+        deleteNoteCallback={deleteNoteCallback}/>
+    </View>
+  );
+}
+...
+```
+
+- Rerun all of your tests
+- Green
+- Commit
+
+[Code for this section]()
 
 </details>

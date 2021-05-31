@@ -582,3 +582,65 @@ function App() {
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/b4351d11328af0a275c89c55573589bace4ff04a)
 
 </details>
+
+<details>
+  <summary>Hook Up Note Deletion</summary>
+
+## Hook Up Note Deletion
+
+Now we will test drive the deletion of a note
+
+- Uncomment the assertions that will drive us to delete a note in `cypress/integration/note.spec.js`
+
+```js
+cy.get('[data-testid=test-name-0]').should('not.exist')
+cy.get('[data-testid=test-description-0]').should('not.exist')
+```
+
+- We have a failing test that will drive our production code changes.
+
+```js
+...
+import { findAll, save, deleteById } from './src/common/NoteRepository';
+...
+
+function App() {
+  ...
+
+  async function deleteNoteCallback( id ) {
+    const newNotesArray = notes.filter(note => note.id !== id);
+    setNotes(newNotesArray);
+    await deleteById(id);
+  }
+
+  return (
+    <View>
+      ...
+
+      <Button testID="note-form-submit" 
+        title="Create Note" 
+        onPress={createNote}/>
+
+      {
+        notes.map((note, index) => (
+          <div>
+            ...
+            <Button testID={"test-button-" + index} 
+              onPress={() => deleteNoteCallback(note.id)}
+              title="Delete note" />
+          </div>
+        ))
+      }
+    </View>
+  );
+}
+...
+```
+
+- Rerun all of the tests
+- Green!
+- Commit
+
+[Code for this section]()
+
+</details>

@@ -40,8 +40,8 @@ describe('Note Capture', () => {
     it('should delete note', () => {
         cy.get('[data-testid=test-button-0]').click();
 
-        // cy.get('[data-testid=test-name-0]').should('not.exist')
-        // cy.get('[data-testid=test-description-0]').should('not.exist')
+        cy.get('[data-testid=test-name-0]').should('not.exist')
+        cy.get('[data-testid=test-description-0]').should('not.exist')
     })
 
     it('should have an option to sign out', () => {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, Button } from 'react-native';
 import { withAuthenticator } from "aws-amplify-react-native";
-import { findAll, save } from './src/common/NoteRepository';
+import { findAll, save, deleteById } from './src/common/NoteRepository';
 import Amplify from "aws-amplify"
 import awsconfig from './aws-exports';
 
@@ -35,6 +35,12 @@ function App() {
     setFormData({name: '', description: ''});
   }
 
+  async function deleteNoteCallback( id ) {
+    const newNotesArray = notes.filter(note => note.id !== id);
+    setNotes(newNotesArray);
+    await deleteById(id);
+  }
+
   return (
     <View>
       <Text testID="note-header">My Notes App</Text>
@@ -60,7 +66,9 @@ function App() {
           <div>
             <Text testID={"test-name-" + index}>{note.name}</Text>
             <Text testID={"test-description-" + index}>{note.description}</Text>
-            <Button testID={"test-button-" + index} title="Delete note" />
+            <Button testID={"test-button-" + index} 
+              onPress={() => deleteNoteCallback(note.id)}
+              title="Delete note" />
           </div>
         ))
       }

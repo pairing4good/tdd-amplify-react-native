@@ -1210,4 +1210,14 @@ Then the new note is listed
 ```
 - This is a new user story that came out of the mobile native app demo.
 
+```js
+useEffect(() => {
+  const interval = setInterval(() => { fetchNotesCallback() }, 1000);
+  return () => clearInterval(interval);
+}, []);
+```
+- I added this auto refresh to `App.js`
+
+[Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/6386c14045c5242f3ee5b7a17d7d211dcf365273)
+
 </details>

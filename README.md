@@ -547,3 +547,38 @@ Here are syntax differences between React and React Native
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/6dc746dd3ee168ef52d8cc8d7f90f5a8cdd5f68c)
 
 </details>
+
+<details>
+  <summary>Connect Repository To UI</summary>
+
+## Connect Repository To UI
+
+Now we will test drive clearing the form values on save
+
+- Uncomment the assertions that will drive us to clear the note form in `cypress/integration/note.spec.js`
+
+```js
+cy.get('[data-testid=note-name-field]').should('have.value', '');
+cy.get('[data-testid=note-description-field]').should('have.value', '');
+```
+
+- We have a failing test that will drive our production code changes.
+
+```js
+...
+function App() {
+...
+  async function createNote() {
+    ... 
+    setFormData({name: '', description: ''});
+  }
+...
+```
+
+- Rerun all of the tests
+- Green!
+- Commit
+
+[Code for this section]()
+
+</details>

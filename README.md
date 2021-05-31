@@ -540,8 +540,6 @@ Here are syntax differences between React and React Native
 - React passes an event `e` to the `onChange` function where React Native just passes the actual text to the `onChangeText` function
 - React's `onClick` is replaced with `onPress` in React Native
 
-[Code for this section]()
-
 - Rerun all of the tests
 - Green!
 - Commit

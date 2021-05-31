@@ -549,9 +549,9 @@ Here are syntax differences between React and React Native
 </details>
 
 <details>
-  <summary>Connect Repository To UI</summary>
+  <summary>Clear Form After Save</summary>
 
-## Connect Repository To UI
+## Clear Form After Save
 
 Now we will test drive clearing the form values on save
 

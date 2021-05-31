@@ -1179,6 +1179,6 @@ test('should add a new note when name and description are provided', () => {
 - Green
 - Commit
 
-[Code for this section]()
+[Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/6c98e133369339d7ef5c4a4c6539c77835ae12cc)
 
 </details>

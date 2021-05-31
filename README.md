@@ -814,3 +814,371 @@ function App() {
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/44e1b06400d9baa0d5f2a4597401b3eda260b888)
 
 </details>
+
+<details>
+  <summary>Component Testing</summary>
+
+## Component Testing
+
+Now that each concern has been pulled out into focused components, we need to move down the testing pyramid and write non-UI tests.
+
+- Run `npm install --save-dev @testing-library/react-native`
+
+- Create a new test `Header.test.js` in the `src/test/` directory
+
+```js
+import React from "react";
+import { render } from "@testing-library/react-native";
+import Header from "../note/Header";
+
+test("should display header", () => {
+  const { getByTestId } = render(<Header />);
+  const heading = getByTestId("note-header");
+  expect(heading.props.children).toBe("My Notes App");
+});
+```
+
+- Run all the tests
+- Green
+
+- Create a new test `NoteList.test.js` in the `src/test/` directory
+
+```js
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react-native";
+import NoteList from "../note/NoteList";
+
+const deleteNoteCallback = jest.fn();
+
+const defaultProps = {
+  notes: [],
+  deleteNoteCallback: deleteNoteCallback,
+};
+
+const setup = (props = {}) => {
+  const setupProps = { ...defaultProps, ...props };
+  return render(<NoteList {...setupProps} />);
+};
+
+test("should display nothing when no notes are provided", () => {
+  const { queryByTestId } = setup();
+  const firstNoteName = queryByTestId("test-name-0");
+
+  expect(firstNoteName).toBeNull();
+});
+```
+
+- Run all the tests
+- Green
+
+- Add another `NoteList` test
+
+```js
+test("should display one note when one notes is provided", () => {
+  const note = { name: "test name", description: "test description" };
+  const { queryByTestId } = setup({ notes: [note] });
+
+  const firstNoteName = queryByTestId("test-name-0");
+  expect(firstNoteName.props.children).toBe("test name");
+
+  const firstNoteDescription = queryByTestId("test-description-0");
+  expect(firstNoteDescription.props.children).toBe("test description");
+});
+```
+
+- Run all the tests
+- Green
+
+- Add another `NoteList` test
+
+```js
+test("should display one note when one notes is provided", () => {
+  const firstNote = { name: "test name 1", description: "test description 1" };
+  const secondNote = { name: "test name 2", description: "test description 2" };
+  const { queryByTestId } = setup({ notes: [firstNote, secondNote] });
+
+  const firstNoteName = queryByTestId("test-name-0");
+  expect(firstNoteName.props.children).toBe("test name 1");
+
+  const firstNoteDescription = queryByTestId("test-description-0");
+  expect(firstNoteDescription.props.children).toBe("test description 1");
+
+  const secondNoteName = queryByTestId("test-name-1");
+  expect(secondNoteName.props.children).toBe("test name 2");
+
+  const secondNoteDescription = queryByTestId("test-description-1");
+  expect(secondNoteDescription.props.children).toBe("test description 2");
+});
+```
+
+- Run all the tests
+- Green
+
+- Add another `NoteList` test
+
+```js
+test("should delete note when clicked", () => {
+  const note = {
+    id: 1,
+    name: "test name 1",
+    description: "test description 1",
+  };
+  const notes = [note];
+  const { getByTestId } = setup({ notes: notes });
+  const button = getByTestId("test-button-0");
+
+  fireEvent.press(button);
+
+  expect(deleteNoteCallback.mock.calls.length).toBe(1);
+  expect(deleteNoteCallback.mock.calls[0][0]).toStrictEqual(1);
+});
+```
+
+- Run all the tests
+- Green
+
+- Add another `NoteList` test
+
+```js
+test("should throw an exception the note array is undefined", () => {
+  expect(() => {
+    render(<NoteList />);
+  }).toThrowError();
+});
+```
+
+- Run all the tests
+- Green
+
+- Create a new test `NoteForm.test.js` in the `src/test/` directory
+
+```js
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react-native";
+import NoteForm from "../note/NoteForm";
+import "@testing-library/jest-dom/extend-expect";
+
+const createNoteCallback = jest.fn();
+const setFormDataCallback = jest.fn();
+const formData = { name: "", description: "" };
+
+const setup = () => {
+  return render(
+    <NoteForm
+      notes={[]}
+      createNoteCallback={createNoteCallback}
+      setFormDataCallback={setFormDataCallback}
+      formData={formData}
+    />
+  );
+};
+
+test("should display a create note button", () => {
+  const { getByTestId } = setup();
+  const button = getByTestId("note-form-submit");
+
+  expect(button.props.children[0].props.children.props.children).toBe(
+    "Create Note"
+  );
+});
+```
+
+- Run all the tests
+- Green
+
+- Add another `NoteForm` test
+
+```js
+test("should display the name placeholder", () => {
+  const { getByPlaceholderText } = setup();
+  const input = getByPlaceholderText("Note Name");
+
+  expect(input).toBeTruthy();
+});
+```
+
+- Run all the tests
+- **Red**
+
+- Update the input with the placeholder
+
+```js
+<TextInput
+  testID="note-name-field"
+  onChangeText={(text) =>
+    props.setFormData({
+      ...props.formData,
+      name: text,
+    })
+  }
+  placeholder="Note Name"
+  value={props.formData.name}
+/>
+```
+- Run all the tests
+- Green
+
+- Add another `NoteForm` test
+
+```js
+test("should display the description placeholder", () => {
+  const { getByPlaceholderText } = setup();
+  const input = getByPlaceholderText("Note Description");
+
+  expect(input).toBeTruthy();
+});
+```
+- Run all the tests
+- **Red**
+
+- Update the input with the placeholder
+
+```js
+<TextInput
+  testID="note-description-field"
+  onChangeText={(text) =>
+    props.setFormData({
+      ...props.formData,
+      description: text,
+    })
+  }
+  placeholder="Note Description"
+  value={props.formData.description}
+/>
+```
+- Run all the tests
+- Green
+
+- Add another `NoteForm` test
+```js
+test('should require name and description', () => {
+    formData.name = "";
+    formData.description = "";
+    const { getByTestId } = setup();
+
+    const button = getByTestId('note-form-submit');
+
+    fireEvent.press(button)
+
+    expect(createNoteCallback.mock.calls.length).toBe(0);
+});
+```
+- Run all the tests
+- **Red**
+
+- Add validation for name and description
+```js
+function NoteForm(props) {
+
+  function createNote() {
+      if (!props.formData.name || !props.formData.description) return;
+      props.createNote();
+      props.setFormData({name: '', description: ''});
+  }
+  
+  return (
+    <View>
+        ...
+        <Button testID="note-form-submit" 
+            title="Create Note" 
+            onPress={createNote}/>
+    </View>
+  );
+}
+...
+```
+
+```js
+function App() {
+  ...
+
+  async function createNote() {
+    const newNote = await save(formData);
+    const updatedNoteList = [ ...notes, newNote ];
+    setNotes(updatedNoteList); 
+  }
+
+  ...
+
+  return (
+    ...
+  );
+}
+...
+```
+- I moved the form name and description reset to the `NoteForm` component to keep reset with the fields that it resets.
+- Run all the tests
+- Green
+
+- Add another `NoteForm` test
+```js
+test('should require name when description provided', () => {
+    formData.name = "";
+    formData.description = "test description";
+    const { getByTestId } = setup();
+
+    const button = getByTestId('note-form-submit');
+
+    fireEvent.press(button)
+
+    expect(createNoteCallback.mock.calls.length).toBe(0);
+});
+```
+- Run all the tests
+- Green
+
+- Add another `NoteForm` test
+```js
+test('should require description when name provided', () => {
+    formData.name = "test name";
+    formData.description = "";
+    const { getByTestId } = setup();
+
+    const button = getByTestId('note-form-submit');
+
+    fireEvent.press(button)
+
+    expect(createNoteCallback.mock.calls.length).toBe(0);
+});
+```
+- Run all the tests
+- Green
+
+- Add another `NoteForm` test
+```js
+test('should add a new note when name and description are provided', () => {
+    formData.name = "test name";
+    formData.description = "test description";
+    const { getByTestId } = setup();
+
+    const button = getByTestId('note-form-submit');
+
+    fireEvent.press(button)
+
+    expect(createNoteCallback.mock.calls.length).toBe(1);
+});
+```
+- Run all the tests
+- Green
+
+- Add another `NoteForm` test
+```js
+test('should add a new note when name and description are provided', () => {
+    formData.name = "test name";
+    formData.description = "test description";
+    const { getByTestId } = setup();
+
+    const button = getByTestId('note-form-submit');
+
+    fireEvent.press(button)
+
+    expect(setFormDataCallback).toHaveBeenCalledWith({name: '', description: ''});
+});
+```
+- Run all the tests
+- Green
+- Commit
+
+[Code for this section]()
+
+</details>

@@ -35,7 +35,6 @@ function App() {
     const newNote = await save(formData);
     const updatedNoteList = [ ...notes, newNote ];
     setNotes(updatedNoteList); 
-    setFormData({name: '', description: ''});
   }
 
   async function deleteNoteCallback( id ) {

@@ -146,6 +146,13 @@ export default function App() {
   );
 }
 ```
+- React Native uses different components than React
+  - [View](https://reactnative.dev/docs/view)
+  - [Text](https://reactnative.dev/docs/text)
+  - [TextInput](https://reactnative.dev/docs/textinput)
+  - [Button](https://reactnative.dev/docs/button)
+
+- In React Native `testID` replaces React's `data-testid` but they both render to the same element id in the web.
 
 - Run the Cypress test
 - Green
@@ -331,54 +338,62 @@ We want to reuse the same Amplify backend API that we created in the first tutor
 
 - Create a new folder in the `src` directory called `test`
 - Create a new file named `NoteRepository.test.js`
-```js
-import { save, findAll, deleteById} from '../common/NoteRepository';
-import { API } from 'aws-amplify';
-import { createNote as createNoteMutation, deleteNote as deleteNoteMutation} from '../graphql/mutations';
-import { listNotes } from '../graphql/queries';
 
+```js
+import { save, findAll, deleteById } from "../common/NoteRepository";
+import { API } from "aws-amplify";
+import {
+  createNote as createNoteMutation,
+  deleteNote as deleteNoteMutation,
+} from "../graphql/mutations";
+import { listNotes } from "../graphql/queries";
 
 const mockGraphql = jest.fn();
-const id = 'test-id'
+const id = "test-id";
 
 beforeEach(() => {
-    API.graphql = mockGraphql
+  API.graphql = mockGraphql;
 });
 
 afterEach(() => {
-    jest.clearAllMocks()
+  jest.clearAllMocks();
 });
 
-it('should create a new note', () => {
-    const note = {name: 'test name', description: 'test description'}
+it("should create a new note", () => {
+  const note = { name: "test name", description: "test description" };
 
-    save(note)
+  save(note);
 
-    expect(mockGraphql.mock.calls.length).toBe(1);
-    expect(mockGraphql.mock.calls[0][0]).toStrictEqual(
-        { query: createNoteMutation, variables: { input: note } }
-    );
-})
+  expect(mockGraphql.mock.calls.length).toBe(1);
+  expect(mockGraphql.mock.calls[0][0]).toStrictEqual({
+    query: createNoteMutation,
+    variables: { input: note },
+  });
+});
 
-it('should findAll notes', () => {
-    const note = {name: 'test name', description: 'test description'}
+it("should findAll notes", () => {
+  const note = { name: "test name", description: "test description" };
 
-    findAll(note)
+  findAll(note);
 
-    expect(mockGraphql.mock.calls.length).toBe(1);
-    expect(mockGraphql.mock.calls[0][0]).toStrictEqual({ query: listNotes });
-})
+  expect(mockGraphql.mock.calls.length).toBe(1);
+  expect(mockGraphql.mock.calls[0][0]).toStrictEqual({ query: listNotes });
+});
 
-it('should delete note by id', () => {
-    deleteById(id)
+it("should delete note by id", () => {
+  deleteById(id);
 
-    expect(mockGraphql.mock.calls.length).toBe(1);
-    expect(mockGraphql.mock.calls[0][0]).toStrictEqual({ query: deleteNoteMutation, variables: { input: { id } }});
-})
+  expect(mockGraphql.mock.calls.length).toBe(1);
+  expect(mockGraphql.mock.calls[0][0]).toStrictEqual({
+    query: deleteNoteMutation,
+    variables: { input: { id } },
+  });
+});
 ```
 
 - Run `npm install jest-expo --save-dev`
 - Add the following to your `package.json` file
+
 ```json
 "scripts": {
   ...
@@ -397,16 +412,17 @@ it('should delete note by id', () => {
 
 - Create a new folder in the `src` directory called `common`
 - Create a new file named `NoteRepository.js`
+
 ```js
-import { API } from 'aws-amplify';
-import { listNotes } from '../graphql/queries';
+import { API } from "aws-amplify";
+import { listNotes } from "../graphql/queries";
 
-export async function findAll(){
-    const apiData = await API.graphql({ query: listNotes });
-    return apiData.data.listNotes.items;
-};
-
+export async function findAll() {
+  const apiData = await API.graphql({ query: listNotes });
+  return apiData.data.listNotes.items;
+}
 ```
+
 - One test goes Green
 
 ```js
@@ -420,18 +436,116 @@ export async function save(note){
     return apiData.data.createNote;
 }
 ```
+
 - One more test goes Green
 
 ```js
-export async function deleteById( id ) {
-    return await API.graphql({ query: deleteNoteMutation, variables: { input: { id } }});
+export async function deleteById(id) {
+  return await API.graphql({
+    query: deleteNoteMutation,
+    variables: { input: { id } },
+  });
 }
 ```
+
 - The final test goes Green
 - Run the Cypress tests.
 - Green!
 - Commit
 
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/647dff44562ffa491d5fc1150986dfb3609fb0e2)
+
+</details>
+
+<details>
+  <summary>Connect Repository To UI</summary>
+
+## Connect Repository To UI
+
+Now we will test drive the creation and listing of notes
+
+- Uncomment the assertions that will drive us to save the note in `cypress/integration/note.spec.js`
+
+```js
+    it('should create a note when name and description provided', () => {
+        cy.get('[data-testid=test-name-0]').should('not.exist');
+        cy.get('[data-testid=test-description-0]').should('not.exist');
+```
+
+- We have a failing test that will drive our production code changes.
+
+```js
+import React, { useState, useEffect } from 'react';
+...
+import { findAll, save } from './src/common/NoteRepository';
+...
+
+function App() {
+  const [notes, setNotes] = useState([]);
+  const [formData, setFormData] = useState({ name: '', description: '' });
+
+  useEffect(() => {
+    fetchNotesCallback();
+  }, []);
+
+  async function fetchNotesCallback() {
+    const notes = await findAll()
+    if(notes)
+      setNotes(notes);
+    else
+      setNotes([])
+  }
+
+  async function createNote() {
+    const newNote = await save(formData);
+    const updatedNoteList = [ ...notes, newNote ];
+    setNotes(updatedNoteList);
+  }
+
+  return (
+    <View>
+      ...
+      <TextInput testID="note-name-field"
+        onChangeText={text => setFormData({
+          ...formData, 'name': text}
+        )}
+        value={formData.name}/>
+
+      <TextInput testID="note-description-field"
+        onChangeText={text => setFormData({
+          ...formData, 'description': text}
+        )}
+        value={formData.description}/>
+
+      <Button testID="note-form-submit"
+        title="Create Note"
+        onPress={createNote}/>
+
+      {
+        notes.map((note, index) => (
+          <div>
+            <Text testID={"test-name-" + index}>{note.name}</Text>
+            <Text testID={"test-description-" + index}>{note.description}</Text>
+            <Button testID={"test-button-" + index} title="Delete note" />
+          </div>
+        ))
+      }
+    </View>
+  );
+}
+...
+```
+Here are syntax differences between React and React Native
+- React's `onChange` is replaced with `onChangeText` in React Native
+- React passes an event `e` to the `onChange` function where React Native just passes the actual text to the `onChangeText` function
+- React's `onClick` is replaced with `onPress` in React Native
+
+[Code for this section]()
+
+- Rerun all of the tests
+- Green!
+- Commit
+
+[Code for this section]()
 
 </details>

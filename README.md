@@ -579,6 +579,6 @@ function App() {
 - Green!
 - Commit
 
-[Code for this section]()
+[Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/b4351d11328af0a275c89c55573589bace4ff04a)
 
 </details>

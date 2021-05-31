@@ -1182,3 +1182,32 @@ test('should add a new note when name and description are provided', () => {
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/6c98e133369339d7ef5c4a4c6539c77835ae12cc)
 
 </details>
+
+<details>
+  <summary>Demonstrate The Native Mobile App</summary>
+
+## Demonstrate The Native Mobile App
+Up until now we have been using Expos Web view to test drive this app.  
+- Run `expo start`
+- Open http://localhost:19002/
+- Set up one of the following
+  - [iPhone Expo App](https://apps.apple.com/app/apple-store/id982107779)
+  - [Android Expo App](https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=www)
+  - [iOS Simulator](https://docs.expo.io/workflow/ios-simulator)
+  - [Android Studio Emulator](https://docs.expo.io/workflow/android-studio-emulator)
+
+I installed the iPhone Expo App from the Apple Store.  I used my iPhone camera to scan the [QR Code](https://en.wikipedia.org/wiki/QR_code) provided in the [Metro Bundler](http://localhost:19002).
+
+- I entered a new note through my iPhone
+- I opened the Amplify web app that I deployed in the first tutorial.
+- I refreshed the web app and verified that the new note is listed.
+- I added a note through the web but it did not list the new note on the mobile app
+
+```
+Given a new note was entered outside of the mobile app
+When I pull down to refresh
+Then the new note is listed
+```
+- This is a new user story that came out of the mobile native app demo.
+
+</details>

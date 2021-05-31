@@ -546,6 +546,6 @@ Here are syntax differences between React and React Native
 - Green!
 - Commit
 
-[Code for this section]()
+[Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/6dc746dd3ee168ef52d8cc8d7f90f5a8cdd5f68c)
 
 </details>

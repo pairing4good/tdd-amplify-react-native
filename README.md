@@ -1370,3 +1370,61 @@ As our users started to use the app they provided the following feedback.
 - When you are typing there is not easy way to minimize the keyboard to view the application
 
 </details>
+
+<details>
+  <summary>Name Field Focus</summary>
+
+## Name Field Focus
+Based on customer feedback let's test drive focus on the `name` input after a note is created.
+```js
+it('should create a note when name and description provided', () => {
+    ...
+    cy.get('[data-testid=note-form-submit]').click();
+
+    cy.focused().should('have.attr', 'data-testid', 'note-name-field');
+
+    ...
+});
+```
+
+- Run all test
+- **Red**
+
+```js
+import React, { useRef } from 'react';
+...
+
+function NoteForm(props) {
+
+  const noteName = useRef(null);
+
+  function createNote() {
+      ...
+      noteName.current.focus();
+  }
+  
+  return (
+    <View>
+        <Input testID="note-name-field" 
+            onChangeText={text => props.setFormData({ 
+            ...props.formData, 'name': text}
+            )}
+            placeholder="Note Name"
+            ref={noteName}
+            value={props.formData.name}/>
+
+        ...
+    </View>
+  );
+}
+...
+```
+- The [useRef](https://reactjs.org/docs/hooks-reference.html#useref) hook provides a reference that you can register on the `ref` attribute.  Then in the on submit callback add the call to set the focus on the referenced input.
+
+- Run all the tests
+- Green
+- Commit
+
+[Code for this section]()
+
+</details>

@@ -30,6 +30,8 @@ describe('Note Capture', () => {
         cy.get('[data-testid=note-description-field]').type('test note description');
         cy.get('[data-testid=note-form-submit]').click();
 
+        cy.focused().should('have.attr', 'data-testid', 'note-name-field');
+
         cy.get('[data-testid=note-name-field]').should('have.value', '');
         cy.get('[data-testid=note-description-field]').should('have.value', '');
 

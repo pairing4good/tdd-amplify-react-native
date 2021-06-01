@@ -10,6 +10,7 @@ function NoteForm(props) {
       if (!props.formData.name || !props.formData.description) return;
       props.createNote();
       props.setFormData({name: '', description: ''});
+      noteName.current.focus();
   }
   
   return (
@@ -19,6 +20,7 @@ function NoteForm(props) {
             ...props.formData, 'name': text}
             )}
             placeholder="Note Name"
+            ref={noteName}
             value={props.formData.name}/>
 
         <Input testID="note-description-field"  

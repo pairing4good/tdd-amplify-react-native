@@ -1209,16 +1209,40 @@ When I pull down to refresh
 Then the new note is listed
 ```
 - This is a new user story that came out of the mobile native app demo.
+- In order to test drive this we will set up the auto refresh in the `NoteList` component so we can pass in the function and the refresh interval.
+```js
+...
+const fetchNotesCallback = jest.fn();
+
+const defaultProps = { 
+    notes: [],
+    deleteNoteCallback: deleteNoteCallback,
+    fetchNotesCallback: fetchNotesCallback,
+    interval: 1
+ };
+  
+...
+
+test('should reload the note list on the specified interval', () => {
+    const oneMillisecond = 1
+    setup({interval: oneMillisecond});
+
+    expect(fetchNotesCallback.mock.calls.length > 1).toBe(true);
+});
+```
+- Run all the tests
+- **Red**
 
 ```js
 useEffect(() => {
-  const interval = setInterval(() => { fetchNotesCallback() }, 1000);
+  const interval = setInterval(() => { props.fetchNotesCallback() }, props.interval);
   return () => clearInterval(interval);
 }, []);
 ```
 - The `useEffect` React hook is called during the loading of the page by React Native.  
-- I added this auto refresh to `App.js`
+- Run all the tests
+- Green
 
-[Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/6386c14045c5242f3ee5b7a17d7d211dcf365273)
+[Code for this section]()
 
 </details>

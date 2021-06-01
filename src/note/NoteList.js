@@ -1,7 +1,12 @@
-import React from 'react';
+import React, {useEffect } from 'react';
 import {Text, Button, View} from 'react-native';
 
 function NoteList(props) {
+
+  useEffect(() => {
+    const interval = setInterval(() => { props.fetchNotesCallback() }, props.interval);
+    return () => clearInterval(interval);
+  }, []);
   
   return (
     <View>

@@ -1355,6 +1355,6 @@ test('should display a create note button', () => {
 - Green
 - Commit
 
-[Code for this section]()
+[Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/4dab8bb942d3f549719134d3467927970fcb6de6)
 
 </details>

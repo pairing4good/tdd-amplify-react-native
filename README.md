@@ -1242,6 +1242,9 @@ useEffect(() => {
 - The `useEffect` React hook is called during the loading of the page by React Native.  
 - Run all the tests
 - Green
+- Commit
+
+While fetching new notes every second is one way to solve this problem, this is a very expensive way to solve this problem.  Imagine 1000 users were calling your GraphQL API every second all day long (~86 million calls).  For a production application it would be better to push changes out to each user.  [DynamoDB Streams](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html) enable this functionality.  It's outside the scope of this tutorial to set this up.
 
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/86af35bf4af3a7d77e9f47b9f1d3b2d87da3ad38)
 

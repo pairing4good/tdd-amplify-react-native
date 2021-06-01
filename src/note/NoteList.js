@@ -1,27 +1,35 @@
-import React, {useEffect } from 'react';
-import {Text, Button, View} from 'react-native';
+import React, { useEffect } from 'react';
+import {SafeAreaView, ScrollView,} from 'react-native';
+import {Card, Button, Text, ListItem} from 'react-native-elements';
+
 
 function NoteList(props) {
-
+  
   useEffect(() => {
     const interval = setInterval(() => { props.fetchNotesCallback() }, props.interval);
     return () => clearInterval(interval);
   }, []);
-  
+
   return (
-    <View>
+    <SafeAreaView style={{flex: 1}}>
+      <ScrollView>
         {
             props.notes.map((note, index) => (
-                <View key={index}>
-                    <Text testID={"test-name-" + index}>{note.name}</Text>
-                    <Text testID={"test-description-" + index}>{note.description}</Text>
-                    <Button testID={"test-button-" + index} 
-                    onPress={() => props.deleteNoteCallback(note.id)}
-                    title="Delete note" />
-                </View>
+              <ListItem key={index}>
+                  <Card containerStyle={{flex: 1}}>
+                      <Card.Title testID={"test-name-" + index}>{note.name}</Card.Title>
+                      <Card.Divider/>
+                      <Text testID={"test-description-" + index}>{note.description}</Text>
+                      <Button testID={"test-button-" + index }  
+                        style={{padding: 10}}
+                        onPress={() => props.deleteNoteCallback(note.id)}
+                        title="Delete note"/>
+                  </Card>
+                </ListItem>
             ))
         }
-      </View>
+        </ScrollView>
+      </SafeAreaView>
   );
 }
 

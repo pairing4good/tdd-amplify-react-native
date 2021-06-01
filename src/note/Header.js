@@ -1,10 +1,10 @@
 import React from 'react';
-import {Text} from 'react-native';
+import { Text } from 'react-native-elements';
 
 function Header() {
   
   return (
-    <Text testID="note-header">My Notes App</Text>
+    <Text testID="note-header" h1>My Notes App</Text>
   );
 }
 

@@ -1,7 +1,10 @@
-import React from 'react';
-import {TextInput, Button, View } from 'react-native';
+import React, { useRef } from 'react';
+import {View } from 'react-native';
+import {Input, Button } from 'react-native-elements';
 
 function NoteForm(props) {
+
+  const noteName = useRef(null);
 
   function createNote() {
       if (!props.formData.name || !props.formData.description) return;
@@ -11,14 +14,14 @@ function NoteForm(props) {
   
   return (
     <View>
-        <TextInput testID="note-name-field" 
+        <Input testID="note-name-field" 
             onChangeText={text => props.setFormData({ 
             ...props.formData, 'name': text}
             )}
             placeholder="Note Name"
             value={props.formData.name}/>
 
-        <TextInput testID="note-description-field"  
+        <Input testID="note-description-field"  
             onChangeText={text => props.setFormData({ 
             ...props.formData, 'description': text}
             )}

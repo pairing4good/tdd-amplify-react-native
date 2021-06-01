@@ -1,7 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react-native';
 import NoteForm from "../note/NoteForm";
-import '@testing-library/jest-dom/extend-expect';
 
 const createNoteCallback = jest.fn();
 const setFormDataCallback = jest.fn();
@@ -17,8 +16,8 @@ const setup = (() => {
 test('should display a create note button', () => {
     const { getByTestId } = setup();
     const button = getByTestId('note-form-submit')
-  
-    expect(button.props.children[0].props.children.props.children).toBe('Create Note')
+    
+    expect(button.props.children[0].props.children[2].props.children).toBe('Create Note')
 });
 
 test('should display the name placeholder', () => {

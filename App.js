@@ -44,7 +44,7 @@ function App() {
   }
 
   return (
-    <View>
+    <View style={{padding: 20}}>
       <Header/>
       <NoteForm setFormData={setFormData} 
         formData={formData} 

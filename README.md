@@ -1249,3 +1249,112 @@ While fetching new notes every second is one way to solve this problem, this is 
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/86af35bf4af3a7d77e9f47b9f1d3b2d87da3ad38)
 
 </details>
+
+<details>
+  <summary>Styling The App</summary>
+
+## Styling The App
+Now let's use [React Native Elements](https://reactnativeelements.com) toolkit to improve the Note Application's look-and-feel.
+
+- Run `npm install react-native-elements`
+- Run `npm install react-native-safe-area-context`
+
+- Add [padding](https://developer.mozilla.org/en-US/docs/Web/CSS/padding) to the top level `View` component in `App.js`
+```js
+...
+<View style={{padding: 20}}>
+  ...
+</View>
+...
+```
+
+- In the `Header` component, switch the import of the `Text` component from `react-native` to `react-native-elements` and add `h1` to the new [Text](https://reactnativeelements.com/docs/text) component.
+```js
+...
+import { Text } from 'react-native-elements';
+
+function Header() {
+  
+  return (
+    <Text testID="note-header" h1>My Notes App</Text>
+  );
+}
+...
+```
+
+- In the `NoteForm` component, switch to use `react-native-elements`.  The component `TextInput` is replaced with `Input`.
+```js
+...
+import {View } from 'react-native';
+import {Input, Button } from 'react-native-elements';
+...
+  
+  return (
+    <View>
+        <Input testID="note-name-field" 
+        ...
+
+        <Input testID="note-description-field" 
+        ...
+
+        <Button testID="note-form-submit" 
+        ...
+    </View>
+  );
+}
+...
+```
+
+- In the `NoteList` component, switch to use `react-native-elements`.  The notes use a `Card` style similar to what was used in the first tutorial.  The notes also use a [ScrollView](https://reactnative.dev/docs/scrollview) in order for users to view their entire list of notes.
+```js
+...
+import {SafeAreaView, ScrollView,} from 'react-native';
+import {Card, Button, Text, ListItem} from 'react-native-elements';
+
+function NoteList(props) {
+...
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <ScrollView>
+        {
+            props.notes.map((note, index) => (
+              <ListItem key={index}>
+                  <Card containerStyle={{flex: 1}}>
+                      <Card.Title testID={"test-name-" + index}>{note.name}</Card.Title>
+                      <Card.Divider/>
+                      <Text testID={"test-description-" + index}>{note.description}</Text>
+                      <Button testID={"test-button-" + index }  
+                        style={{padding: 10}}
+                        onPress={() => props.deleteNoteCallback(note.id)}
+                        title="Delete note"/>
+                  </Card>
+                </ListItem>
+            ))
+        }
+        </ScrollView>
+      </SafeAreaView>
+  );
+}
+...
+```
+
+- Run all the tests
+- Red
+
+- The structure of the `NoteForm` component changed so one of the component test is breaking.  Update the test to point to the new location.
+```js
+test('should display a create note button', () => {
+    const { getByTestId } = setup();
+    const button = getByTestId('note-form-submit')
+    
+    expect(button.props.children[0].props.children[2].props.children).toBe('Create Note')
+});
+```
+
+- Run all the tests
+- Green
+- Commit
+
+[Code for this section]()
+
+</details>

@@ -1358,3 +1358,15 @@ test('should display a create note button', () => {
 [Code for this section](https://github.com/pairing4good/tdd-amplify-react-native/commit/4dab8bb942d3f549719134d3467927970fcb6de6)
 
 </details>
+
+<details>
+  <summary>Customer Feedback</summary>
+
+## Customer Feedback
+Be sure to have a regular time set up with your customers to demonstrate your working application.  Also release an [MVP](https://en.wikipedia.org/wiki/Minimum_viable_productLo) as soon as possible.  Let your users install the app on their devices and start using it.  
+
+As our users started to use the app they provided the following feedback.
+- After adding a note the cursor needs to focus on the name field instead of the description field
+- When you are typing there is not easy way to minimize the keyboard to view the application
+
+</details>

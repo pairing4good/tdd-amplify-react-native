@@ -1365,9 +1365,12 @@ test('should display a create note button', () => {
 ## Customer Feedback
 Be sure to have a regular time set up with your customers to demonstrate your working application.  Also release an [MVP](https://en.wikipedia.org/wiki/Minimum_viable_productLo) as soon as possible.  Let your users install the app on their devices and start using it.  
 
-As our users started to use the app they provided the following feedback.
-- After adding a note the cursor needs to focus on the name field instead of the description field
-- When you are typing there is not easy way to minimize the keyboard to view the application
+As our users started to use the app they provided the following requested user story. 
+```
+Given that a valid name and description was entered
+When I Create the Note
+Then focus my cursor on the Note Name field
+```
 
 </details>
 

@@ -73,10 +73,3 @@ test('should delete note when clicked', () => {
 test('should throw an exception the note array is undefined', () => {
     expect(() => {render(<NoteList />)}).toThrowError();
 });
-
-test('should reload the note list on the specified interval', () => {
-    const oneMillisecond = 1
-    setup({interval: oneMillisecond});
-
-    expect(fetchNotesCallback.mock.calls.length > 1).toBe(true);
-});

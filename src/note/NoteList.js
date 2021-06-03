@@ -1,14 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {SafeAreaView, ScrollView,} from 'react-native';
 import {Card, Button, Text, ListItem} from 'react-native-elements';
 
 
 function NoteList(props) {
-  
-  useEffect(() => {
-    const interval = setInterval(() => { props.fetchNotesCallback() }, props.interval);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>

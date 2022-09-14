@@ -1,5 +1,7 @@
 # TDD React Native App
 
+![Node CI](https://github.com/pairing4good/tdd-amplify-react-native/actions/workflows/node-ci.yaml/badge.svg)
+
 This is the second part of a two part tutorial. In the [first tutorial](https://github.com/pairing4good/tdd-amplify-react) we created a React Notes App that uses an AWS Amplify backend to secure and store notes. In this tutorial we will hook up a [native](https://en.wikipedia.org/wiki/Mobile_app#Native_app) mobile app that will use the same backend service that we built in the first tutorial.
 
 ## Prerequisites
